@@ -3,121 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohamed Bah | Senior Operations & AI Strategy</title>
+    <title>Mohamed Bah | Operations & AI Strategy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.0.1/dist/geist.css">
     <style>
-        :root { --accent: #38bdf8; }
+        :root { 
+            --forest: #003314; 
+            --stone: #e5e7eb;
+            --ink: #111827;
+        }
         body { 
-            background: #050505; 
-            color: #ffffff; 
+            background: #fcfcfc; 
+            color: var(--ink); 
             font-family: 'Geist Sans', sans-serif;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* 3D Floating Animation */
-        @keyframes float {
-            0% { transform: translateY(0px) rotateX(0deg); }
-            50% { transform: translateY(-10px) rotateX(2deg); }
-            100% { transform: translateY(0px) rotateX(0deg); }
+        /* Brutalist Elements */
+        .brutalist-card {
+            background: white;
+            border: 2px solid var(--forest);
+            padding: 2.5rem;
+            transition: all 0.2s ease;
+            position: relative;
         }
 
-        .spatial-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 32px;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            animation: float 6s ease-in-out infinite;
+        .brutalist-card:hover {
+            box-shadow: 8px 8px 0px var(--forest);
+            transform: translate(-4px, -4px);
         }
 
-        .spatial-card:hover {
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid var(--accent);
-            transform: scale(1.02) translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(56, 189, 248, 0.1);
+        .section-header {
+            border-bottom: 4px solid var(--forest);
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding-right: 2rem;
         }
 
-        .glow-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #050505 100%);
-            z-index: -1;
-        }
+        .mono { font-family: 'Geist Mono', monospace; font-size: 0.8rem; }
 
-        .stat-number {
-            background: linear-gradient(to bottom, #fff 30%, #64748b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .forest-bg { background-color: var(--forest); color: white; }
+        .forest-text { color: var(--forest); }
+
+        /* Slide Animation */
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
+        .reveal { animation: slideIn 0.6s ease-out forwards; }
     </style>
 </head>
 <body class="antialiased">
-    <div class="glow-bg"></div>
 
-    <div class="max-w-5xl mx-auto px-8 py-20">
-        <header class="mb-24 text-center">
-            <h1 class="text-6xl font-bold tracking-tighter mb-4 italic">Mohamed Bah</h1>
-            <p class="text-sky-400 font-medium tracking-widest text-sm uppercase">Senior Operations & AI Strategy</p>
+    <div class="max-w-6xl mx-auto px-6 py-20">
+        <header class="mb-32 reveal">
+            <h1 class="text-7xl font-black tracking-tighter forest-text mb-4">MOHAMED BAH</h1>
+            <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-12">
+                <p class="text-xl font-bold uppercase tracking-widest italic">Senior Operations & AI Strategy</p>
+                <p class="mono text-gray-500 uppercase tracking-widest">Gatineau, QC — Bilingual (EN/FR)</p>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
             
-            <div class="spatial-card md:col-span-8 p-10 flex flex-col justify-center min-h-[400px]">
-                <p class="text-sky-400 text-xs font-bold uppercase tracking-widest mb-6 underline decoration-2 underline-offset-8">Flagship Achievement</p>
-                <h2 class="text-4xl font-bold mb-6 tracking-tight leading-tight">AI Deployment & <br>Inquiry Automation</h2>
-                <p class="text-gray-400 text-lg leading-relaxed max-w-xl">
-                    Architected and implemented the business case for <span class="text-white font-medium">Fin AI</span>—successfully transitioning enterprise support to an autonomous model that handles <span class="text-white font-medium">2/3 of all inbound inquiries</span>, reclaiming 150+ hours of manual capacity monthly.
+            <div class="md:col-span-8 brutalist-card reveal" style="animation-delay: 0.1s;">
+                <p class="mono forest-text mb-4 tracking-tighter font-bold">[ CASE STUDY : AI IMPLEMENTATION ]</p>
+                <h2 class="text-4xl font-black mb-6 leading-none">STRATEGIC FIN AI DEPLOYMENT</h2>
+                <p class="text-lg text-gray-700 mb-8 max-w-2xl">
+                    Architected the business case and end-to-end implementation for **Fin AI**. Successfully transitioned enterprise support to an autonomous model that now handles **66% of all inbound inquiries**, reclaiming 150+ hours of manual capacity every month.
+                </p>
+                <div class="flex gap-4">
+                    <div class="forest-bg px-4 py-2 font-black text-2xl italic">2/3</div>
+                    <p class="text-xs uppercase font-bold self-center leading-tight">Inquiries resolved<br>autonomously</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 brutalist-card forest-bg reveal" style="animation-delay: 0.2s;">
+                <p class="mono text-white/50 mb-8">[ SCALE ]</p>
+                <h3 class="text-6xl font-black italic mb-4 tracking-tighter">20+</h3>
+                <p class="font-bold uppercase tracking-widest text-sm">Global Team Scaling</p>
+                <p class="mt-4 text-white/80 text-sm">Directing a distributed network of contractors across North America and Australia.</p>
+            </div>
+
+            <div class="md:col-span-5 brutalist-card reveal" style="animation-delay: 0.3s;">
+                <p class="mono forest-text mb-4">[ DATA INFLUENCE ]</p>
+                <h3 class="text-2xl font-black mb-4">ROADMAP STEERAGE</h3>
+                <p class="text-gray-600">
+                    Transformed operational friction into data-backed business cases. Successfully drove **Product team reprioritization** by quantifying feature gaps against operational overhead.
                 </p>
             </div>
 
-            <div class="spatial-card md:col-span-4 p-10 flex flex-col justify-center text-center" style="animation-delay: 0.5s;">
-                <span class="stat-number text-7xl font-bold italic tracking-tighter">66%</span>
-                <p class="text-gray-400 text-sm mt-2 uppercase tracking-widest font-bold">Autonomous Success</p>
-            </div>
-
-            <div class="spatial-card md:col-span-4 p-10 flex flex-col justify-center text-center" style="animation-delay: 1s;">
-                <span class="stat-number text-7xl font-bold italic tracking-tighter">20+</span>
-                <p class="text-gray-400 text-sm mt-2 uppercase tracking-widest font-bold">Global Contractors</p>
-            </div>
-
-            <div class="spatial-card md:col-span-8 p-10 flex flex-col justify-center" style="animation-delay: 1.5s;">
-                <h3 class="text-2xl font-bold mb-4 italic">Data-Driven Roadmap Influence</h3>
-                <p class="text-gray-400 leading-relaxed">
-                    Directed organizational focus by converting operational friction into high-impact data models. Successfully drove **Product team reprioritization** by demonstrating the direct correlation between feature gaps and operational overhead.
-                </p>
-            </div>
-
-            <div class="spatial-card md:col-span-12 p-10">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-12">
+            <div class="md:col-span-7 brutalist-card bg-gray-50 border-gray-200 reveal" style="animation-delay: 0.4s; border-color: #d1d5db;">
+                <p class="mono text-gray-400 mb-6">[ TECHNICAL_STACK.EXE ]</p>
+                <div class="grid grid-cols-2 gap-8">
                     <div>
-                        <p class="text-sky-400 text-[10px] font-bold uppercase tracking-widest mb-4">Core Systems</p>
-                        <p class="text-sm text-gray-300 leading-relaxed">Salesforce Service Cloud, Jira/Confluence, HubSpot, Zendesk.</p>
+                        <h4 class="font-black text-xs uppercase mb-3 forest-text">Systems & AI</h4>
+                        <p class="text-sm text-gray-500 leading-relaxed font-medium">Fin AI, Claude, Gemini, Zapier, Salesforce, Jira, HubSpot.</p>
                     </div>
                     <div>
-                        <p class="text-sky-400 text-[10px] font-bold uppercase tracking-widest mb-4">AI Stack</p>
-                        <p class="text-sm text-gray-300 leading-relaxed">Claude, Gemini, Fin AI, Zapier, Prompt Engineering.</p>
-                    </div>
-                    <div>
-                        <p class="text-sky-400 text-[10px] font-bold uppercase tracking-widest mb-4">Analysis</p>
-                        <p class="text-sm text-gray-300 leading-relaxed">Python (Pandas), SQL, Advanced Modeling.</p>
-                    </div>
-                    <div>
-                        <p class="text-sky-400 text-[10px] font-bold uppercase tracking-widest mb-4">Geography</p>
-                        <p class="text-sm text-gray-300 leading-relaxed">Gatineau, QC<br>Bilingual (EN/FR)</p>
+                        <h4 class="font-black text-xs uppercase mb-3 forest-text">Data & Analysis</h4>
+                        <p class="text-sm text-gray-500 leading-relaxed font-medium">Python (Pandas), SQL, Advanced Modeling, Prompt Engineering.</p>
                     </div>
                 </div>
             </div>
 
-            <a href="https://github.com/Moezusb" class="md:col-span-12 spatial-card p-8 text-center bg-white/5 hover:bg-white/10 transition-all border-dashed">
-                <p class="font-bold tracking-widest text-xs uppercase text-sky-400">Technical Deep Dive</p>
-                <p class="text-xl font-medium mt-2">Explore Documented Proof of Work on GitHub →</p>
+            <a href="https://github.com/Moezusb" target="_blank" class="md:col-span-12 brutalist-card forest-bg text-center py-12 hover:bg-[#00441a] transition-colors group">
+                <h2 class="text-3xl font-black italic tracking-tighter group-hover:tracking-widest transition-all">VIEW TECHNICAL PROOF OF WORK →</h2>
+                <p class="mono mt-2 text-white/60 uppercase">Documented Python Scripts & SQL Models</p>
             </a>
         </div>
 
-        <footer class="mt-32 text-center text-gray-600 text-[10px] uppercase tracking-[0.3em]">
-            &copy; 2026 Mohamed Bah • AI-Native Operations
+        <footer class="mt-32 flex justify-between items-end border-t-2 border-gray-100 pt-8">
+            <p class="mono text-gray-400 uppercase tracking-widest">© 2026 MB / AI-Native Ops</p>
+            <div class="flex gap-8 font-black uppercase text-sm tracking-tighter">
+                <a href="#" class="hover:forest-text transition-colors">LinkedIn</a>
+                <a href="#" class="hover:forest-text transition-colors">Contact</a>
+            </div>
         </footer>
     </div>
+
 </body>
 </html>
