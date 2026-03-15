@@ -3,63 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohamed Bah | AI Enablement & Senior Operations</title>
+    <title>Mohamed Bah | Senior Operations & AI Strategy</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.0.1/dist/geist.css">
     <style>
-        body { background-color: #0f172a; color: #f8fafc; }
-        .bento-card { background: #1e293b; border: 1px solid #334155; border-radius: 1rem; padding: 1.5rem; }
-        .accent-text { color: #38bdf8; }
+        :root { --accent: #38bdf8; }
+        body { 
+            background: #050505; 
+            color: #ffffff; 
+            font-family: 'Geist Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 3D Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-10px) rotateX(2deg); }
+            100% { transform: translateY(0px) rotateX(0deg); }
+        }
+
+        .spatial-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .spatial-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid var(--accent);
+            transform: scale(1.02) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(56, 189, 248, 0.1);
+        }
+
+        .glow-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #050505 100%);
+            z-index: -1;
+        }
+
+        .stat-number {
+            background: linear-gradient(to bottom, #fff 30%, #64748b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
-<body class="font-sans antialiased">
+<body class="antialiased">
+    <div class="glow-bg"></div>
 
-    <div class="max-w-4xl mx-auto px-6 py-12">
-        <header class="mb-16">
-            <h1 class="text-4xl font-bold mb-2">Mohamed Bah</h1>
-            <p class="text-xl accent-text font-medium">Senior Operations Leader & AI Architect</p>
-            <p class="text-gray-400 mt-4 max-w-2xl">Bilingual (EN/FR) professional specializing in scaling business operations through AI-powered automation and data strategy. Currently based in Gatineau, QC.</p>
+    <div class="max-w-5xl mx-auto px-8 py-20">
+        <header class="mb-24 text-center">
+            <h1 class="text-6xl font-bold tracking-tighter mb-4 italic">Mohamed Bah</h1>
+            <p class="text-sky-400 font-medium tracking-widest text-sm uppercase">Senior Operations & AI Strategy</p>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
             
-            <div class="bento-card md:col-span-2 border-l-4 border-sky-500">
-                <h3 class="text-sm uppercase tracking-widest text-gray-500 mb-2">Standout Project</h3>
-                <h2 class="text-2xl font-bold mb-3">LLM Triage Pipeline</h2>
-                <p class="text-gray-300 leading-relaxed">Built and deployed a production-grade triage system using Claude, Zapier, and Intercom. It autonomously resolves 66% of enterprise customer interactions, saving 150+ hours of manual work monthly.</p>
-                <div class="mt-4 flex gap-2">
-                    <span class="bg-sky-500/10 text-sky-400 px-3 py-1 rounded-full text-xs font-semibold">Claude API</span>
-                    <span class="bg-sky-500/10 text-sky-400 px-3 py-1 rounded-full text-xs font-semibold">Zapier</span>
-                    <span class="bg-sky-500/10 text-sky-400 px-3 py-1 rounded-full text-xs font-semibold">Python</span>
+            <div class="spatial-card md:col-span-8 p-10 flex flex-col justify-center min-h-[400px]">
+                <p class="text-sky-400 text-xs font-bold uppercase tracking-widest mb-6 underline decoration-2 underline-offset-8">Flagship Achievement</p>
+                <h2 class="text-4xl font-bold mb-6 tracking-tight leading-tight">AI Deployment & <br>Inquiry Automation</h2>
+                <p class="text-gray-400 text-lg leading-relaxed max-w-xl">
+                    Architected and implemented the business case for <span class="text-white font-medium">Fin AI</span>—successfully transitioning enterprise support to an autonomous model that handles <span class="text-white font-medium">2/3 of all inbound inquiries</span>, reclaiming 150+ hours of manual capacity monthly.
+                </p>
+            </div>
+
+            <div class="spatial-card md:col-span-4 p-10 flex flex-col justify-center text-center" style="animation-delay: 0.5s;">
+                <span class="stat-number text-7xl font-bold italic tracking-tighter">66%</span>
+                <p class="text-gray-400 text-sm mt-2 uppercase tracking-widest font-bold">Autonomous Success</p>
+            </div>
+
+            <div class="spatial-card md:col-span-4 p-10 flex flex-col justify-center text-center" style="animation-delay: 1s;">
+                <span class="stat-number text-7xl font-bold italic tracking-tighter">20+</span>
+                <p class="text-gray-400 text-sm mt-2 uppercase tracking-widest font-bold">Global Contractors</p>
+            </div>
+
+            <div class="spatial-card md:col-span-8 p-10 flex flex-col justify-center" style="animation-delay: 1.5s;">
+                <h3 class="text-2xl font-bold mb-4 italic">Data-Driven Roadmap Influence</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    Directed organizational focus by converting operational friction into high-impact data models. Successfully drove **Product team reprioritization** by demonstrating the direct correlation between feature gaps and operational overhead.
+                </p>
+            </div>
+
+            <div class="spatial-card md:col-span-12 p-10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-12">
+                    <div>
+                        <p class="text-sky-400 text-[10px] font-bold uppercase tracking-widest mb-4">Core Systems</p>
+                        <p class="text-sm text-gray-300 leading-relaxed">Salesforce Service Cloud, Jira/Confluence, HubSpot, Zendesk.</p>
+                    </div>
+                    <div>
+                        <p class="text-sky-400 text-[10px] font-bold uppercase tracking-widest mb-4">AI Stack</p>
+                        <p class="text-sm text-gray-300 leading-relaxed">Claude, Gemini, Fin AI, Zapier, Prompt Engineering.</p>
+                    </div>
+                    <div>
+                        <p class="text-sky-400 text-[10px] font-bold uppercase tracking-widest mb-4">Analysis</p>
+                        <p class="text-sm text-gray-300 leading-relaxed">Python (Pandas), SQL, Advanced Modeling.</p>
+                    </div>
+                    <div>
+                        <p class="text-sky-400 text-[10px] font-bold uppercase tracking-widest mb-4">Geography</p>
+                        <p class="text-sm text-gray-300 leading-relaxed">Gatineau, QC<br>Bilingual (EN/FR)</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="bento-card">
-                <h3 class="text-lg font-bold mb-2 italic">Scale & Leadership</h3>
-                <p class="text-gray-400 text-sm">Managed 20+ person global contractor teams and owned multi-vendor budgets (Intercom, Entrust).</p>
-            </div>
-
-            <div class="bento-card">
-                <h3 class="text-lg font-bold mb-2 italic">Technical Stack</h3>
-                <p class="text-gray-400 text-sm">Python, SQL, Salesforce Service Cloud, Jira/Confluence, HubSpot, and Prompt Engineering.</p>
-            </div>
-
-            <div class="bento-card md:col-span-2 text-center py-10">
-                <h2 class="text-xl font-bold mb-4">Technical Proof of Work</h2>
-                <p class="text-gray-400 mb-6 italic">Building in public: explore my documented Python projects and system architectures.</p>
-                <a href="https://github.com/Moezusb" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg transition-colors">
-                    View GitHub Repositories
-                </a>
-            </div>
+            <a href="https://github.com/Moezusb" class="md:col-span-12 spatial-card p-8 text-center bg-white/5 hover:bg-white/10 transition-all border-dashed">
+                <p class="font-bold tracking-widest text-xs uppercase text-sky-400">Technical Deep Dive</p>
+                <p class="text-xl font-medium mt-2">Explore Documented Proof of Work on GitHub →</p>
+            </a>
         </div>
 
-        <footer class="mt-20 pt-8 border-t border-slate-800 text-center text-gray-500 text-sm">
-            <p>&copy; 2026 Mohamed Bah • Built with AI-Native Logic</p>
-            <div class="mt-4 flex justify-center gap-6">
-                <a href="https://linkedin.com" class="hover:text-sky-400 transition-colors">LinkedIn</a>
-                <a href="mailto:your-email@example.com" class="hover:text-sky-400 transition-colors">Contact</a>
-            </div>
+        <footer class="mt-32 text-center text-gray-600 text-[10px] uppercase tracking-[0.3em]">
+            &copy; 2026 Mohamed Bah • AI-Native Operations
         </footer>
     </div>
-
 </body>
 </html>
