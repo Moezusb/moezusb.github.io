@@ -286,6 +286,67 @@
       line-height: 1.55;
     }
 
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      background: var(--forest);
+      color: var(--white);
+      border-bottom: 2px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      padding: 32px 32px;
+      text-decoration: none;
+      transition: background 0.15s, box-shadow 0.18s, transform 0.18s;
+      cursor: crosshair;
+      opacity: 0;
+      animation: slideUp 0.55s ease 0.25s forwards;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .cta-banner:hover {
+      background: var(--forest-mid);
+    }
+
+    .cta-banner:hover .cta-arrow {
+      color: rgba(255,255,255,0.8);
+      transform: translateX(6px);
+    }
+
+    .cta-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .cta-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-top: 6px;
+    }
+
+    .cta-arrow {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      line-height: 1;
+      color: rgba(255,255,255,0.25);
+      transition: color 0.15s, transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .cta-banner-wrap {
+      border-bottom: 2px solid var(--ink);
+      opacity: 0;
+      animation: slideUp 0.55s ease 0.25s forwards;
+    }
+
+    /* ── MAIN GRID ── */
     .main-grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
@@ -445,6 +506,28 @@
       border-color: var(--forest);
     }
 
+    /* project link button inside card */
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border: 2px solid var(--forest);
+      color: var(--forest);
+      transition: background 0.15s, color 0.15s;
+      cursor: crosshair;
+    }
+
+    .card-link:hover {
+      background: var(--forest);
+      color: var(--white);
+    }
+
     .stack-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -475,59 +558,6 @@
       font-weight: 500;
     }
 
-    .cta-card {
-      grid-column: span 12;
-      background: var(--forest);
-      color: var(--white);
-      border: 2px solid var(--forest);
-      padding: 44px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 32px;
-      text-decoration: none;
-      transition: background 0.15s, box-shadow 0.18s, transform 0.18s;
-      cursor: crosshair;
-    }
-
-    .cta-card:hover {
-      background: var(--forest-mid);
-      border-color: var(--forest-mid);
-      box-shadow: 8px 8px 0px var(--ink);
-      transform: translate(-4px, -4px);
-    }
-
-    .cta-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 42px;
-      letter-spacing: 0.04em;
-      line-height: 1;
-      color: var(--white);
-    }
-
-    .cta-sub {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-      margin-top: 8px;
-    }
-
-    .cta-arrow {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 64px;
-      line-height: 1;
-      color: rgba(255,255,255,0.25);
-      transition: color 0.15s, transform 0.2s;
-      flex-shrink: 0;
-    }
-
-    .cta-card:hover .cta-arrow {
-      color: rgba(255,255,255,0.7);
-      transform: translateX(6px);
-    }
-
     footer {
       padding: 28px 0;
       display: flex;
@@ -547,10 +577,7 @@
       color: var(--ink-muted);
     }
 
-    .foot-links {
-      display: flex;
-      gap: 0;
-    }
+    .foot-links { display: flex; gap: 0; }
 
     .foot-links a {
       font-family: 'DM Mono', monospace;
@@ -595,7 +622,7 @@
       .main-grid { grid-template-columns: 1fr; gap: 14px; padding: 32px 0; }
       .main-grid > * { grid-column: span 1 !important; }
       .stack-cols { grid-template-columns: 1fr; gap: 24px; }
-      .cta-card { flex-direction: column; align-items: flex-start; padding: 32px; }
+      .cta-banner { flex-direction: column; align-items: flex-start; padding: 28px; }
       .header-bottom { grid-template-columns: 1fr; }
       h1 { font-size: 72px; }
       .nav-links { display: none; }
@@ -635,7 +662,7 @@
 
       <div class="header-bottom">
         <div>
-          <div class="header-subtitle">Senior Operations Associate &amp; AI Enablement Expert </div>
+          <div class="header-subtitle">Senior Operations Associate &amp; AI Enablement Expert</div>
           <p class="header-desc">
             I build AI-powered systems that do real work. From identifying the opportunity to shipping the solution, I own the full arc.
           </p>
@@ -667,8 +694,24 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- CTA BANNER -- full width below stats -->
+  <div class="cta-banner-wrap">
+    <a href="https://github.com/Moezusb" target="_blank" class="cta-banner">
+      <div>
+        <div class="cta-title">PROOF OF WORK, BUILT IN PUBLIC</div>
+        <div class="cta-sub">Documented Python projects, AI workflows &amp; system architectures</div>
+      </div>
+      <div class="cta-arrow">→</div>
+    </a>
+  </div>
+
+  <div class="wrap">
+
     <div class="main-grid" id="work">
 
+      <!-- FIN AI -->
       <div class="card reveal" style="grid-column: span 8;">
         <div class="card-label">Case study — AI implementation</div>
         <h2 class="card-title">FIN AI DEPLOYMENT &amp;<br>TRIAGE PIPELINE</h2>
@@ -689,6 +732,7 @@
         </div>
       </div>
 
+      <!-- SCALE -->
       <div class="card card-dark reveal" style="grid-column: span 4; animation-delay: 0.08s;">
         <div class="card-label">Scale</div>
         <div class="big-num">20+</div>
@@ -698,6 +742,27 @@
         </p>
       </div>
 
+      <!-- MEETING TO JIRA -->
+      <div class="card reveal" style="grid-column: span 7; animation-delay: 0.1s;">
+        <div class="card-label">Portfolio project — Automation</div>
+        <h2 class="card-title">MEETING TO JIRA<br>PIPELINE</h2>
+        <p class="card-body">
+          A Python pipeline that reads a raw meeting transcript, extracts every action item, classifies each one by type and priority, assigns it to the right person, calculates due dates from natural language, and outputs structured Jira-ready tickets in JSON -- with a visual summary. 8 tickets generated from a 52-minute meeting in under 1 second.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">JSON</span>
+          <span class="tag">NLP Classification</span>
+          <span class="tag">Jira API Format</span>
+          <span class="tag">Workflow Automation</span>
+          <span class="tag">Matplotlib</span>
+        </div>
+        <a href="https://github.com/Moezusb/meeting-to-jira-pipeline" target="_blank" class="card-link">
+          View Project →
+        </a>
+      </div>
+
+      <!-- PRODUCT REPRIORITIZATION -->
       <div class="card reveal" style="grid-column: span 5; animation-delay: 0.12s;">
         <div class="card-label">Data influence</div>
         <h2 class="card-title">PRODUCT REPRIORITIZATION</h2>
@@ -706,7 +771,8 @@
         </p>
       </div>
 
-      <div class="card card-stone reveal" style="grid-column: span 7; animation-delay: 0.16s;" id="stack">
+      <!-- STACK -->
+      <div class="card card-stone reveal" style="grid-column: span 12; animation-delay: 0.16s;" id="stack">
         <div class="card-label">Technical stack</div>
         <div class="stack-cols">
           <div>
@@ -731,14 +797,6 @@
           </div>
         </div>
       </div>
-
-      <a href="https://github.com/Moezusb" target="_blank" class="cta-card reveal" style="animation-delay: 0.2s;">
-        <div>
-          <div class="cta-title">PROOF OF WORK, BUILT IN PUBLIC</div>
-          <div class="cta-sub">Documented Python projects, AI workflows &amp; system architectures</div>
-        </div>
-        <div class="cta-arrow">→</div>
-      </a>
 
     </div>
 
