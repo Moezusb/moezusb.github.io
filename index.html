@@ -17,9 +17,9 @@
       --forest-pale: #e6ede8;
       --ink:          #0d0d0d;
       --ink-mid:      #3a3a3a;
-      --ink-muted:    #666; /* Darkened for better readability */
+      --ink-muted:    #666;
       --stone:       #f0efec;
-      --stone-mid:   #dcdbd7; /* Darkened border for contrast */
+      --stone-mid:   #dcdbd7;
       --white:       #fafaf8;
       --shadow:      8px 8px 0px var(--forest);
       --shadow-sm:   5px 5px 0px var(--forest);
@@ -40,7 +40,6 @@
 
     a { color: inherit; text-decoration: none; cursor: crosshair; }
 
-    /* Grain effect */
     body::after {
       content: ''; position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
@@ -49,7 +48,7 @@
 
     .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
 
-    /* ── NAV ── */
+    /* NAV */
     nav { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 2px solid var(--ink); }
     .nav-inner { display: flex; align-items: stretch; max-width: 1080px; margin: 0 auto; padding: 0 32px; }
     .nav-logo {
@@ -66,7 +65,7 @@
     }
     .nav-links a:hover { background: var(--forest); color: var(--white); }
 
-    /* ── HERO ── */
+    /* HERO */
     header { padding: 64px 0 56px; border-bottom: 2px solid var(--ink); opacity: 0; animation: slideUp 0.55s ease forwards; }
     .header-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
     .meta-pill {
@@ -91,7 +90,7 @@
     .btn:hover { box-shadow: var(--shadow-sm); transform: translate(-2px, -2px); }
     .btn-fill { background: var(--forest); color: var(--white); border-color: var(--forest); }
 
-    /* ── ORBIT ── */
+    /* ORBIT */
     .orbit-wrap { position: relative; width: 340px; height: 340px; }
     .orbit-ring { position: absolute; border-radius: 50%; border: 1.5px solid rgba(0,51,20,0.15); }
     .orbit-ring-1 { width: 100%; height: 100%; animation: spin 28s linear infinite; }
@@ -103,17 +102,16 @@
     .orbit-center-val { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--forest); line-height: 1; }
     .orbit-center-lbl { font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; color: var(--ink-muted); margin-top: 4px; }
 
-    /* ── STATS ── */
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 2px solid var(--ink); }
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 2px solid var(--ink); }
     .stat-cell { padding: 32px; border-right: 1.5px solid var(--stone-mid); }
     .stat-cell:last-child { border-right: none; }
     .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--forest); line-height: 1; margin-bottom: 8px; }
     .stat-lbl { font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; color: var(--ink-muted); line-height: 1.4; }
 
-    /* ── CARDS ── */
+    /* CARDS */
     .main-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; padding: 48px 0; border-bottom: 2px solid var(--ink); }
-    
-    /* Hero Card (Dark) */
+
     .card-hero {
       grid-column: span 12; background: var(--forest); color: var(--white);
       display: grid; grid-template-columns: 1fr 340px; border: 2px solid var(--forest); transition: 0.2s;
@@ -126,9 +124,9 @@
 
     .card { background: var(--white); border: 2px solid var(--forest); padding: 40px; transition: 0.2s; }
     .card:hover { box-shadow: var(--shadow); transform: translate(-4px, -4px); }
-    
-    .card-label { 
-      font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; 
+
+    .card-label {
+      font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase;
       color: var(--forest); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600;
     }
     .card-hero .card-label { color: rgba(255,255,255,0.7); }
@@ -139,7 +137,6 @@
     .card-body { font-size: 15px; color: var(--ink-mid); line-height: 1.8; }
     .card-hero .card-body { color: rgba(255,255,255,0.85); }
 
-    /* TAG CONTRAST FIX */
     .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
     .tag {
       font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase;
@@ -155,13 +152,21 @@
     }
     .card-link:hover { background: var(--forest); color: var(--white); }
 
-    /* FINANCE LAB CONTRAST */
+    /* SIDE PROJECTS SECTION */
+    .side-projects-label {
+      grid-column: span 12;
+      padding: 24px 0 8px;
+      border-top: 1.5px solid var(--stone-mid);
+      margin-top: 12px;
+    }
+
+    /* FINANCE LAB */
     .card-lab { grid-column: span 12; background: #eeede9; border: 2px solid var(--stone-mid); display: grid; grid-template-columns: 1fr 340px; }
     .card-lab h2.card-title { color: var(--forest); }
     .card-lab .card-label { color: var(--ink-muted); }
     .lab-stat { background: var(--white); border-left: 1px solid var(--stone-mid); display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-    /* ── STACK ── */
+    /* STACK */
     .stack-wrap { grid-column: span 12; background: var(--stone); padding: 48px; border: 2px solid var(--stone-mid); }
     .stack-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
     .stack-pill { font-family: 'DM Mono', monospace; font-size: 11px; padding: 10px 18px; border: 1.5px solid var(--stone-mid); background: var(--white); transition: 0.2s; }
@@ -237,38 +242,40 @@
         <div class="stat-lbl">Manual hours<br>Saved monthly</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-num">87%</div>
-        <div class="stat-lbl">Triage Engine<br>Accuracy</div>
+        <div class="stat-num">67%</div>
+        <div class="stat-lbl">Enterprise inquiry<br>Auto-resolution rate</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-num">B.Comm</div>
-        <div class="stat-lbl">Finance Major<br>U of Alberta</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">$120K</div>
-        <div class="stat-lbl">Enterprise Risk<br>Auto-Escalation</div>
+        <div class="stat-num">5+</div>
+        <div class="stat-lbl">Years in B2B SaaS<br>Operations</div>
       </div>
     </div>
 
     <div class="main-grid" id="work">
 
+      <!-- PRODUCTION WORK -->
       <div class="card-hero reveal">
         <div class="card-hero-body">
           <div class="card-label">Production Infrastructure</div>
           <h2 class="card-title">INTERCOM FIN AI — FULL DEPLOYMENT</h2>
           <p class="card-body">
-            Built the business case, secured buy-in, and deployed across enterprise support. I designed the prompt architecture and escalation logic that now resolves two-thirds of all inquiries autonomously.
+            Built the business case, secured buy-in, and deployed across client support. I designed the workflows and escalation logic that now resolves two-thirds of all inquiries autonomously.
           </p>
           <div class="tag-row">
             <span class="tag">Intercom Fin AI</span>
-            <span class="tag">Claude API</span>
             <span class="tag">ROI Framework</span>
+            <span class="tag">Stakeholder Management</span>
           </div>
         </div>
         <div class="card-hero-stat">
           <div class="hero-stat-val">67%</div>
           <div class="hero-stat-lbl">Success Rate</div>
         </div>
+      </div>
+
+      <!-- SIDE PROJECTS DIVIDER -->
+      <div class="side-projects-label reveal">
+        <div class="card-label" style="margin-bottom:0;">Independent Projects</div>
       </div>
 
       <div class="card reveal" style="grid-column: span 6;">
@@ -289,7 +296,7 @@
         <div class="card-label">Data Analysis</div>
         <h2 class="card-title">REVENUE BRIDGE ANALYTICS</h2>
         <p class="card-body">
-          Surface silent churn by merging CRM, Support, and Product usage data to catch "at-risk" accounts before they cancel.
+          Surface silent churn by merging CRM, Support, and Product usage data to catch at-risk accounts before they cancel.
         </p>
         <div class="tag-row">
           <span class="tag">Pandas</span>
@@ -299,12 +306,13 @@
         <a href="https://github.com/Moezusb/revenue-bridge-analytics" target="_blank" class="card-link">View Repository →</a>
       </div>
 
+      <!-- INTELLECTUAL INTERESTS -->
       <div class="card-lab reveal" id="lab">
         <div class="card-hero-body">
-          <div class="card-label">Finance & Market Labs</div>
+          <div class="card-label">Intellectual Interests</div>
           <h2 class="card-title">MARKET STRESS & YIELD MONITORS</h2>
           <p class="card-body">
-            Sovereign yield curve trackers and real-time power grid monitors for ERCOT and PJM markets. Finance curiosity, built in code.
+            Sovereign yield curve trackers and real-time power grid monitors for ERCOT and PJM markets. Built out of genuine curiosity at the intersection of finance, energy, and data.
           </p>
           <div class="btn-group" style="margin-top: 24px;">
             <a href="https://moezusb.github.io/yield-curve-monitor" class="btn btn-fill" target="_blank">Yield Monitor</a>
@@ -317,6 +325,7 @@
         </div>
       </div>
 
+      <!-- STACK -->
       <div class="stack-wrap reveal" id="stack">
         <div class="card-label">Technical stack</div>
         <div class="stack-grid">
@@ -325,6 +334,7 @@
           <span class="stack-pill">Intercom Fin AI</span>
           <span class="stack-pill">Pydantic</span>
           <span class="stack-pill">Prompt Engineering</span>
+          <span class="stack-pill">Zapier</span>
           <div class="stack-section-label">Data & Ops</div>
           <span class="stack-pill">Python (Pandas)</span>
           <span class="stack-pill">SQL</span>
