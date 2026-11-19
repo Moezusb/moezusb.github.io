@@ -1,546 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohamed Bah — Operations & AI Builder</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg:        #08080e;
-    --bg2:       #0f0f18;
-    --bg3:       #141420;
-    --surface:   #1a1a28;
-    --border:    rgba(255,255,255,0.07);
-    --border-hi: rgba(0,229,204,0.3);
-    --teal:      #00e5cc;
-    --teal-glow: rgba(0,229,204,0.06);
-    --text:      #f0ede8;
-    --text-sec:  #8a8a9a;
-    --text-mut:  #4a4a5a;
-    --mono:      'IBM Plex Mono', monospace;
-    --display:   'Syne', sans-serif;
-    --body:      'DM Sans', sans-serif;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--body);
-    font-size: 16px;
-    line-height: 1.7;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* ── CURSOR ── */
-  #cur  { position:fixed; width:8px; height:8px; background:var(--teal); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .2s,height .2s; mix-blend-mode:screen; }
-  #ring { position:fixed; width:32px; height:32px; border:1px solid rgba(0,229,204,.4); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .25s,height .25s; }
-  body:has(a:hover) #cur  { width:14px; height:14px; }
-  body:has(a:hover) #ring { width:48px; height:48px; border-color:rgba(0,229,204,.7); }
-
-  /* ── GRAIN ── */
-  body::before {
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:900; opacity:.35;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
-  }
-
-  /* ── NAV ── */
-  nav {
-    position:fixed; top:0; left:0; right:0; z-index:200;
-    padding:20px 52px;
-    display:flex; align-items:center; justify-content:space-between;
-    background:linear-gradient(to bottom, rgba(8,8,14,.96) 0%, transparent 100%);
-    backdrop-filter:blur(16px);
-  }
-  .nav-logo { font-family:var(--mono); font-size:13px; color:var(--teal); letter-spacing:.15em; text-decoration:none; }
-  .nav-links { display:flex; gap:36px; list-style:none; }
-  .nav-links a { font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--text-sec); text-decoration:none; text-transform:uppercase; transition:color .2s; }
-  .nav-links a:hover { color:var(--teal); }
-  .nav-status { font-family:var(--mono); font-size:11px; color:var(--text-mut); display:flex; align-items:center; gap:8px; letter-spacing:.08em; }
-  .dot { width:6px; height:6px; background:var(--teal); border-radius:50%; animation:pulse 2.5s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,229,204,.4)} 50%{opacity:.6;box-shadow:0 0 0 6px rgba(0,229,204,0)} }
-
-  /* ── HERO ── */
-  #hero { position:relative; min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:120px 52px 100px; overflow:hidden; }
-  #canvas-bg { position:absolute; inset:0; z-index:0; }
-  .hero-inner { position:relative; z-index:2; max-width:920px; }
-
-  .hero-label { font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--teal); text-transform:uppercase; margin-bottom:28px; opacity:0; animation:fadeUp .8s .2s forwards; }
-
-  .hero-name { font-family:var(--display); font-size:clamp(60px,9vw,118px); font-weight:800; line-height:.9; letter-spacing:-.02em; color:var(--text); opacity:0; animation:fadeUp .9s .35s forwards; }
-  .hero-name span { display:block; color:transparent; -webkit-text-stroke:1px rgba(240,237,232,.18); }
-
-  .hero-desc { margin-top:32px; font-size:17px; font-weight:300; color:var(--text-sec); max-width:540px; line-height:1.65; opacity:0; animation:fadeUp .9s .5s forwards; }
-  .hero-desc strong { color:var(--text); font-weight:400; }
-
-  .hero-cta { margin-top:48px; display:flex; gap:14px; align-items:center; opacity:0; animation:fadeUp .9s .65s forwards; }
-
-  .btn-p { display:inline-flex; align-items:center; gap:10px; padding:14px 28px; background:var(--teal); color:#08080e; font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; border-radius:2px; transition:all .2s; }
-  .btn-p:hover { background:#00fce0; transform:translateY(-1px); box-shadow:0 8px 32px rgba(0,229,204,.25); }
-  .btn-g { display:inline-flex; align-items:center; gap:10px; padding:14px 28px; border:1px solid var(--border); color:var(--text-sec); font-family:var(--mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; border-radius:2px; transition:all .2s; }
-  .btn-g:hover { border-color:var(--teal); color:var(--teal); }
-
-  /* Stats */
-  .hero-stats { position:absolute; bottom:56px; left:52px; right:52px; display:flex; border-top:1px solid var(--border); padding-top:32px; opacity:0; animation:fadeUp .9s .85s forwards; z-index:2; }
-  .stat { flex:1; padding-right:40px; border-right:1px solid var(--border); margin-right:40px; }
-  .stat:last-child { border-right:none; padding-right:0; margin-right:0; }
-  .stat-n { font-family:var(--display); font-size:40px; font-weight:800; color:var(--teal); line-height:1; letter-spacing:-.02em; }
-  .stat-l { font-family:var(--mono); font-size:10px; color:var(--text-mut); letter-spacing:.1em; text-transform:uppercase; margin-top:8px; }
-
-  /* ── SECTIONS ── */
-  section { padding:120px 52px; }
-  .sh { display:flex; align-items:baseline; gap:18px; margin-bottom:64px; }
-  .sn { font-family:var(--mono); font-size:11px; color:var(--teal); letter-spacing:.15em; }
-  .st { font-family:var(--display); font-size:clamp(30px,4vw,50px); font-weight:800; letter-spacing:-.02em; }
-  .sl { flex:1; height:1px; background:var(--border); margin-left:20px; }
-
-  /* reveal */
-  .rev { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
-  .rev.on { opacity:1; transform:translateY(0); }
-
-  /* ── FEATURED (Deal Desk AI) ── */
-  .feat { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--border); border-radius:4px; overflow:hidden; margin-bottom:20px; transition:border-color .3s; }
-  .feat:hover { border-color:var(--border-hi); }
-
-  .feat-vis { background:var(--bg3); padding:60px 48px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; min-height:460px; }
-  .feat-vis::before { content:''; position:absolute; top:-80px; right:-80px; width:300px; height:300px; background:radial-gradient(circle,rgba(0,229,204,.12) 0%,transparent 70%); pointer-events:none; }
-  .feat-glyph { font-family:var(--display); font-size:108px; font-weight:800; color:transparent; -webkit-text-stroke:1px rgba(0,229,204,.13); line-height:1; letter-spacing:-.04em; user-select:none; }
-
-  .live-badge { display:inline-flex; align-items:center; gap:8px; padding:6px 14px; background:rgba(0,229,204,.1); border:1px solid rgba(0,229,204,.25); border-radius:2px; font-family:var(--mono); font-size:11px; color:var(--teal); letter-spacing:.1em; text-transform:uppercase; width:fit-content; }
-  .live-badge::before { content:''; width:6px; height:6px; background:var(--teal); border-radius:50%; animation:pulse 2s infinite; }
-
-  .feat-info { background:var(--bg2); padding:60px 48px; display:flex; flex-direction:column; justify-content:center; gap:22px; }
-  .proj-type { font-family:var(--mono); font-size:11px; letter-spacing:.15em; color:var(--text-mut); text-transform:uppercase; }
-  .feat-title { font-family:var(--display); font-size:34px; font-weight:700; letter-spacing:-.02em; line-height:1.1; }
-  .feat-desc { font-size:15px; font-weight:300; color:var(--text-sec); line-height:1.7; }
-
-  .tags { display:flex; flex-wrap:wrap; gap:8px; }
-  .tag { padding:4px 12px; background:var(--surface); border:1px solid var(--border); border-radius:2px; font-family:var(--mono); font-size:11px; color:var(--text-sec); letter-spacing:.06em; }
-
-  .plink { display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; letter-spacing:.1em; color:var(--teal); text-decoration:none; text-transform:uppercase; transition:gap .2s; }
-  .plink:hover { gap:14px; }
-
-  /* ── PROOF CARD (Intercom) ── */
-  .proof { border:1px solid var(--border); border-radius:4px; padding:48px; background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%); display:grid; grid-template-columns:1fr auto; gap:48px; align-items:center; position:relative; overflow:hidden; margin-bottom:20px; transition:border-color .3s; }
-  .proof:hover { border-color:var(--border-hi); }
-  .proof::after { content:'PRODUCTION'; position:absolute; right:-44px; top:50%; transform:translateY(-50%) rotate(90deg); font-family:var(--mono); font-size:10px; letter-spacing:.3em; color:rgba(0,229,204,.08); pointer-events:none; }
-  .proof-label { font-family:var(--mono); font-size:11px; color:var(--teal); letter-spacing:.15em; text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
-  .proof-label::before { content:''; width:20px; height:1px; background:var(--teal); }
-  .proof-title { font-family:var(--display); font-size:26px; font-weight:700; letter-spacing:-.02em; margin-bottom:14px; }
-  .proof-desc { font-size:15px; font-weight:300; color:var(--text-sec); max-width:540px; line-height:1.7; margin-bottom:20px; }
-  .proof-metrics { display:flex; gap:36px; flex-shrink:0; }
-  .pm-n { font-family:var(--display); font-size:32px; font-weight:800; color:var(--teal); letter-spacing:-.02em; line-height:1; }
-  .pm-l { font-family:var(--mono); font-size:10px; color:var(--text-mut); letter-spacing:.1em; text-transform:uppercase; margin-top:6px; }
-
-  /* ── PROJECT GRID ── */
-  .pgrid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:4px; overflow:hidden; margin-bottom:20px; }
-  .pc { background:var(--bg); padding:40px; display:flex; flex-direction:column; gap:14px; transition:background .25s; text-decoration:none; color:inherit; }
-  .pc:hover { background:var(--bg2); }
-  .pc:hover .pca { transform:translateX(4px); color:var(--teal); }
-  .pc-num { font-family:var(--mono); font-size:11px; color:var(--text-mut); letter-spacing:.1em; }
-  .pc-title { font-family:var(--display); font-size:21px; font-weight:700; letter-spacing:-.01em; }
-  .pc-desc { font-size:14px; font-weight:300; color:var(--text-sec); line-height:1.65; flex:1; }
-  .pc-foot { display:flex; align-items:center; justify-content:space-between; margin-top:8px; padding-top:18px; border-top:1px solid var(--border); }
-  .pca { font-size:18px; color:var(--text-mut); transition:transform .2s,color .2s; }
-  .pc-full { grid-column:1/-1; border-top:1px solid var(--border); }
-
-  /* ── LAB ── */
-  #lab { background:var(--bg2); }
-  .lab-intro { font-size:15px; font-weight:300; color:var(--text-sec); max-width:540px; margin-bottom:48px; line-height:1.7; }
-  .lgrid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-  .lc { border:1px solid var(--border); border-radius:4px; padding:36px; background:var(--bg3); transition:border-color .3s,transform .3s; text-decoration:none; color:inherit; display:block; }
-  .lc:hover { border-color:var(--border-hi); transform:translateY(-2px); }
-  .ltag { font-family:var(--mono); font-size:10px; letter-spacing:.15em; color:var(--teal); text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
-  .ltag::after { content:''; flex:1; height:1px; background:rgba(0,229,204,.12); }
-  .lt { font-family:var(--display); font-size:20px; font-weight:700; letter-spacing:-.01em; margin-bottom:12px; }
-  .ld { font-size:14px; font-weight:300; color:var(--text-sec); line-height:1.65; margin-bottom:20px; }
-
-  /* ── STACK ── */
-  #stack { background:var(--bg); }
-  .sgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:4px; overflow:hidden; }
-  .sg { background:var(--bg); padding:32px; }
-  .sg-l { font-family:var(--mono); font-size:10px; letter-spacing:.2em; color:var(--teal); text-transform:uppercase; margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border); }
-  .si { font-family:var(--mono); font-size:12px; color:var(--text-sec); letter-spacing:.04em; display:flex; align-items:center; gap:8px; padding:5px 0; }
-  .si::before { content:''; width:3px; height:3px; background:var(--text-mut); border-radius:50%; flex-shrink:0; }
-
-  /* ── CONTACT ── */
-  #contact { background:var(--bg); border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
-  .c-head { font-family:var(--display); font-size:clamp(38px,5vw,70px); font-weight:800; letter-spacing:-.03em; line-height:.93; margin-bottom:32px; }
-  .c-head em { font-style:normal; color:transparent; -webkit-text-stroke:1px rgba(240,237,232,.2); }
-  .c-sub { font-size:15px; font-weight:300; color:var(--text-sec); max-width:420px; line-height:1.7; margin-bottom:40px; }
-  .c-links { display:flex; flex-direction:column; gap:12px; }
-  .cl { display:flex; align-items:center; gap:16px; font-family:var(--mono); font-size:13px; color:var(--text-sec); text-decoration:none; letter-spacing:.06em; padding:16px 20px; border:1px solid var(--border); border-radius:2px; transition:all .2s; }
-  .cl:hover { border-color:var(--teal); color:var(--teal); background:var(--teal-glow); }
-  .cl-i { opacity:.45; font-size:15px; }
-  .c-right { display:flex; flex-direction:column; gap:16px; padding-top:8px; }
-  .ib { padding:22px; border:1px solid var(--border); border-radius:2px; }
-  .ib-l { font-family:var(--mono); font-size:10px; letter-spacing:.2em; color:var(--text-mut); text-transform:uppercase; margin-bottom:6px; }
-  .ib-v { font-size:14px; color:var(--text-sec); font-weight:300; }
-  .ib-v strong { color:var(--text); font-weight:400; }
-
-  footer { padding:24px 52px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
-  footer p { font-family:var(--mono); font-size:11px; color:var(--text-mut); letter-spacing:.08em; }
-  footer a { color:var(--text-mut); text-decoration:none; transition:color .2s; }
-  footer a:hover { color:var(--teal); }
-
-  @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
-
-  @media(max-width:900px){
-    nav{padding:18px 24px;}
-    .nav-links{display:none;}
-    section{padding:80px 24px;}
-    #hero{padding:100px 24px 90px;}
-    .hero-stats{left:24px;right:24px;flex-wrap:wrap;gap:24px;}
-    .stat{border-right:none;padding-right:0;margin-right:0;flex:0 0 42%;}
-    .feat{grid-template-columns:1fr;}
-    .feat-vis{min-height:220px;}
-    .proof{grid-template-columns:1fr;}
-    .proof-metrics{margin-top:24px;}
-    .pgrid{grid-template-columns:1fr;}
-    .lgrid{grid-template-columns:1fr;}
-    .sgrid{grid-template-columns:1fr 1fr;}
-    #contact{grid-template-columns:1fr;padding:80px 24px 60px;}
-    footer{padding:20px 24px;flex-direction:column;gap:8px;}
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mohamed Bah · Operations and applied AI</title>
+  <meta name="description" content="Mohamed Bah is an operator who dissects problems and ships fixes, putting AI into live business with the controls it needs: release automation in regulated software, and an Intercom Fin AI rollout resolving 67% of interactions.">
+  <meta property="og:title" content="Mohamed Bah · Operations and applied AI">
+  <meta property="og:description" content="An operator who dissects problems and ships fixes. Gatineau, QC. English, French, Pular.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moezusb.github.io/">
+  <meta name="theme-color" content="#050B16">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
 <body>
+  <canvas id="aurora" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <a class="skip" href="#main">Skip to content</a>
 
-<div id="cur"></div>
-<div id="ring"></div>
+  <header class="topbar">
+    <nav class="nav glass" aria-label="Main">
+      <a class="nav-name" href="#top">Mohamed Bah</a>
+      <ul>
+        <li><a href="#impact">Impact</a></li>
+        <li><a href="#production">Production</a></li>
+        <li><a href="#builds">Builds</a></li>
+        <li><a href="#experience">Experience</a></li>
+      </ul>
+      <a class="nav-cta" href="#contact">Contact</a>
+    </nav>
+  </header>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">MB//</a>
-  <ul class="nav-links">
-    <li><a href="#work">Work</a></li>
-    <li><a href="#lab">Lab</a></li>
-    <li><a href="#stack">Stack</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="nav-status"><span class="dot"></span>Available — Canada</div>
-</nav>
-
-<!-- HERO -->
-<section id="hero">
-  <canvas id="canvas-bg"></canvas>
-  <div class="hero-inner">
-    <p class="hero-label">Operations · AI Deployment · Systems Builder</p>
-    <h1 class="hero-name">Mohamed<span>Bah</span></h1>
-    <p class="hero-desc">
-      I close the gap between <strong>strategy and production</strong>. I build AI pipelines, operational engines, and revenue-aware systems that turn business cases into deployed infrastructure.
-    </p>
-    <div class="hero-cta">
-      <a href="https://deal-desk-ai.vercel.app" target="_blank" class="btn-p">View Live Product →</a>
-      <a href="https://github.com/Moezusb" target="_blank" class="btn-g">GitHub ↗</a>
-    </div>
-  </div>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-n" data-target="67" data-suffix="%">0%</div>
-      <div class="stat-l">Auto-Resolution Rate — Intercom Fin AI</div>
-    </div>
-    <div class="stat">
-      <div class="stat-n" data-target="150" data-suffix="+">0+</div>
-      <div class="stat-l">Manual Hours Eliminated Monthly</div>
-    </div>
-    <div class="stat">
-      <div class="stat-n" data-target="5" data-suffix="+">0+</div>
-      <div class="stat-l">Years in B2B SaaS Operations</div>
-    </div>
-    <div class="stat">
-      <div class="stat-n" data-target="20" data-suffix="+">0+</div>
-      <div class="stat-l">Distributed Contractors Managed</div>
-    </div>
-  </div>
-</section>
-
-<!-- WORK -->
-<section id="work">
-  <div class="sh rev">
-    <span class="sn">01</span>
-    <h2 class="st">Work</h2>
-    <div class="sl"></div>
-  </div>
-
-  <!-- HERO PROJECT -->
-  <div class="feat rev">
-    <div class="feat-vis">
-      <div class="live-badge">Live Product</div>
-      <div class="feat-glyph">DD<br>AI</div>
-    </div>
-    <div class="feat-info">
-      <p class="proj-type">Featured Build · Claude API · Vercel</p>
-      <h3 class="feat-title">Deal Desk AI</h3>
-      <p class="feat-desc">Post-call intelligence for GTM teams. Paste a sales call transcript and get a structured deal summary, objection map, next steps, risk flags, and a ready-to-send follow-up email — in seconds. Built on the Claude API with a Vercel serverless proxy. Designed to cut deal review time from 30 minutes to under 2.</p>
-      <div class="tags">
-        <span class="tag">Claude API</span>
-        <span class="tag">TypeScript</span>
-        <span class="tag">Next.js</span>
-        <span class="tag">Vercel</span>
-        <span class="tag">Prompt Engineering</span>
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-name">
+      <p class="hero-role intro-step">Operations and applied AI</p>
+      <h1 id="hero-name" class="intro-step">Mohamed Bah</h1>
+      <p class="hero-lede intro-step">I'm an operator who enjoys dissecting problems and shipping fixes. I thrive on simplifying the complex: finding the work that quietly eats a team's hours, building the case for changing it, and putting AI into the live business with the controls it needs to be trusted.</p>
+      <div class="hero-actions intro-step">
+        <a class="btn btn-primary" href="mailto:mohamedmoezus@gmail.com">Email me</a>
+        <a class="btn" href="https://www.linkedin.com/in/bah-007700/">LinkedIn</a>
+        <a class="btn" href="https://github.com/Moezusb">GitHub</a>
       </div>
-      <a href="https://deal-desk-ai.vercel.app" target="_blank" class="plink">Live Demo →</a>
-    </div>
-  </div>
+      <p class="availability glass intro-step"><span class="pulse" aria-hidden="true"></span>Open to operations, product operations, and AI enablement roles. Based in Gatineau, QC, working remotely across Canada.</p>
+    </section>
 
-  <!-- PRODUCTION PROOF -->
-  <div class="proof rev">
-    <div>
-      <div class="proof-label">Production Deployment · Acuity Insights</div>
-      <h3 class="proof-title">Intercom Fin AI — Full Rollout</h3>
-      <p class="proof-desc">Built the ROI model and business case that secured executive go/no-go. Designed the experiment framework, ran the controlled pilot, and drove production rollout. The system now autonomously resolves the majority of enterprise interactions with human-in-the-loop controls and zero post-launch instability.</p>
-      <div class="tags">
-        <span class="tag">Intercom Fin AI</span>
-        <span class="tag">ROI Modelling</span>
-        <span class="tag">Experiment Design</span>
-        <span class="tag">Stakeholder Alignment</span>
-        <span class="tag">Human-in-the-Loop</span>
+    <section class="block" id="impact" aria-labelledby="impact-title">
+      <div class="block-head">
+        <h2 id="impact-title">What shipped</h2>
+        <p>Results from systems running in production at Castor and Acuity Insights.</p>
       </div>
-    </div>
-    <div class="proof-metrics">
-      <div><div class="pm-n">67%</div><div class="pm-l">Auto-Resolution</div></div>
-      <div><div class="pm-n">150+</div><div class="pm-l">Hours/Month Saved</div></div>
-    </div>
-  </div>
+      <ol class="impact">
+        <li class="metric glass">
+          <span class="metric-where">Castor</span>
+          <strong class="metric-figure"><span data-count="3">3</span> min</strong>
+          <span class="metric-label">or less to draft a release's notes with Claude, even across hundreds of Jira keys</span>
+          <span class="metric-before">Previously 15 minutes to over 2 hours by hand</span>
+        </li>
+        <li class="metric glass">
+          <span class="metric-where">Castor</span>
+          <strong class="metric-figure"><span data-count="100">100</span>%</strong>
+          <span class="metric-label">of release notes published on time, live, and fully compliant</span>
+          <span class="metric-before">Previously waited on Support to publish</span>
+        </li>
+        <li class="metric glass">
+          <span class="metric-where">Castor</span>
+          <strong class="metric-figure metric-words">Exec, Product, Engineering</strong>
+          <span class="metric-label">adopted the permission-aware Release Board I built for release planning</span>
+          <span class="metric-before">Previously status lived across separate tools</span>
+        </li>
+        <li class="metric glass">
+          <span class="metric-where">Acuity Insights</span>
+          <strong class="metric-figure"><span data-count="67">67</span>%</strong>
+          <span class="metric-label">of customer interactions resolved autonomously by Intercom Fin AI</span>
+          <span class="metric-before">Previously answered by hand</span>
+        </li>
+        <li class="metric glass">
+          <span class="metric-where">Acuity Insights</span>
+          <strong class="metric-figure"><span data-count="150">150</span>+ hours</strong>
+          <span class="metric-label">of team capacity freed every month by the Fin AI rollout</span>
+          <span class="metric-before">Previously spent on repeat questions</span>
+        </li>
+        <li class="metric glass">
+          <span class="metric-where">Acuity Insights</span>
+          <strong class="metric-figure">About <span data-count="50">50</span>%</strong>
+          <span class="metric-label">fewer escalations after redesigning cross-team workflows</span>
+          <span class="metric-before">Previously no clear ownership lanes</span>
+        </li>
+      </ol>
+    </section>
 
-  <!-- PROJECT GRID -->
-  <div class="pgrid rev">
-    <a href="https://github.com/Moezusb/revenue-bridge-analytics" target="_blank" class="pc">
-      <span class="pc-num">02 — Data Pipeline</span>
-      <h3 class="pc-title">Revenue Bridge Analytics</h3>
-      <p class="pc-desc">A three-stage pipeline that merges CRM, Support, and Product usage data to surface churn risk before it shows up in the numbers. Risk classification, strategic recommendations, and a three-panel executive chart.</p>
-      <div class="tags"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">SQL Logic</span><span class="tag">Churn Risk</span></div>
-      <div class="pc-foot"><span></span><span class="pca">→</span></div>
-    </a>
-    <a href="https://github.com/Moezusb/meeting-to-jira-pipeline" target="_blank" class="pc">
-      <span class="pc-num">03 — Extraction Pipeline</span>
-      <h3 class="pc-title">Oracle V2 — Meeting to Jira</h3>
-      <p class="pc-desc">Automated action-item extraction from meeting transcripts into Jira-ready tickets. Python pipeline with a dedicated extraction layer, CRM cross-referencing, and auto-escalation for high-value accounts.</p>
-      <div class="tags"><span class="tag">Python</span><span class="tag">Pydantic</span><span class="tag">NLP</span><span class="tag">Jira API</span></div>
-      <div class="pc-foot"><span></span><span class="pca">→</span></div>
-    </a>
-    <a href="https://github.com/Moezusb/support-triage-engine" target="_blank" class="pc pc-full">
-      <span class="pc-num">04 — Classification Engine</span>
-      <h3 class="pc-title">Support Triage Engine</h3>
-      <p class="pc-desc">Rule-based AI classification of 1,000 synthetic support tickets across 7 categories, achieving 87.2% accuracy. Full performance analysis, a three-panel chart, and a case study documenting the logic-ordering optimization that lifted accuracy by 11 percentage points.</p>
-      <div class="tags"><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">Classification</span><span class="tag">87.2% Accuracy</span></div>
-      <div class="pc-foot"><span></span><span class="pca">→</span></div>
-    </a>
-  </div>
-</section>
+    <section class="block" id="production" aria-labelledby="production-title">
+      <div class="block-head">
+        <h2 id="production-title">Production work</h2>
+        <p>Systems I built or led inside real companies.</p>
+      </div>
+      <div class="cases glass">
+        <div class="tabs" role="tablist" aria-label="Case studies">
+          <button role="tab" id="tab-castor" aria-controls="panel-castor" aria-selected="true">Castor</button>
+          <button role="tab" id="tab-acuity" aria-controls="panel-acuity" aria-selected="false" tabindex="-1">Acuity Insights</button>
+        </div>
 
-<!-- LAB -->
-<section id="lab">
-  <div class="sh rev">
-    <span class="sn">02</span>
-    <h2 class="st">Lab</h2>
-    <div class="sl"></div>
-  </div>
-  <p class="lab-intro rev">Side builds and experiments. Built out of genuine curiosity — at the intersection of education, finance, and energy infrastructure.</p>
-  <div class="lgrid rev">
-    <a href="https://mathvoice-web.vercel.app/" target="_blank" class="lc">
-      <div class="ltag">Education · EN/FR</div>
-      <h3 class="lt">MathVoice</h3>
-      <p class="ld">Bilingual voice math tutor for Grade 1–3. Built on ElevenLabs TTS and Web Speech API. No backend, no install — runs entirely in the browser. Graceful TTS fallback when credits run out. A full product loop from idea to live demo.</p>
-      <div class="tags" style="margin-bottom:16px;"><span class="tag">ElevenLabs TTS</span><span class="tag">Web Speech API</span><span class="tag">Vercel</span><span class="tag">Bilingual</span></div>
-      <span class="plink" style="font-size:11px;">Live Demo →</span>
-    </a>
-    <a href="https://github.com/Moezusb/power-market-monitor" target="_blank" class="lc">
-      <div class="ltag">Finance · Energy Markets</div>
-      <h3 class="lt">Power Market Monitor</h3>
-      <p class="ld">Real-time power grid monitors for ERCOT and PJM markets alongside sovereign yield curve trackers. Built at the intersection of finance, energy, and live data feeds — intellectual curiosity made visible.</p>
-      <div class="tags" style="margin-bottom:16px;"><span class="tag">Live API Feed</span><span class="tag">ERCOT / PJM</span><span class="tag">Yield Curves</span><span class="tag">Real-Time</span></div>
-      <span class="plink" style="font-size:11px;">View Repository →</span>
-    </a>
-  </div>
-</section>
+        <article class="case" role="tabpanel" id="panel-castor" aria-labelledby="tab-castor">
+          <header class="case-head">
+            <h3>Release operations with Claude</h3>
+            <p>Product Operations Lead at Castor, clinical trial technology, 2026</p>
+          </header>
+          <div class="case-grid">
+            <div>
+              <h4>The problem</h4>
+              <p>Release notes in regulated software were assembled by hand from Jira, taking anywhere from 15 minutes to over two hours per release. Leadership had no single view of what was shipping, what was at risk, or when freeze dates landed.</p>
+            </div>
+            <div>
+              <h4>What I built</h4>
+              <ul>
+                <li>A Claude workflow that turns a release's Jira keys into a referenced draft, a compliant customer-ready version, and a review checklist for the subject matter expert.</li>
+                <li>A second workflow that prepares live help center articles, removing a Product-to-Support dependency.</li>
+                <li>A permission-aware Release Board, plus sprint and roadmap scorecards for the Chief Product Officer.</li>
+                <li>An analysis of thousands of NPS responses and support tickets from 2023 to 2026 that quantified the two biggest pain points.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>The result</h4>
+              <p>Drafts in under three minutes. Every release note published on time, live, and compliant. The Release Board became the shared planning view for Exec, Product, and Engineering, and the feedback analysis was reviewed favourably in a compliance audit.</p>
+            </div>
+          </div>
+        </article>
 
-<!-- STACK -->
-<section id="stack">
-  <div class="sh rev">
-    <span class="sn">03</span>
-    <h2 class="st">Stack</h2>
-    <div class="sl"></div>
-  </div>
-  <div class="sgrid rev">
-    <div class="sg">
-      <div class="sg-l">AI & Automation</div>
-      <div class="si">Claude API</div><div class="si">Intercom Fin AI</div><div class="si">ElevenLabs</div><div class="si">Prompt Engineering</div><div class="si">Human-in-the-Loop</div><div class="si">LLM Pipeline Design</div><div class="si">Experiment Frameworks</div>
-    </div>
-    <div class="sg">
-      <div class="sg-l">Data & Analytics</div>
-      <div class="si">Python (Pandas)</div><div class="si">SQL</div><div class="si">Tableau</div><div class="si">Looker</div><div class="si">Power BI</div><div class="si">Cohort Analysis</div><div class="si">KPI Dashboards</div>
-    </div>
-    <div class="sg">
-      <div class="sg-l">Build & Deploy</div>
-      <div class="si">TypeScript</div><div class="si">Next.js</div><div class="si">Vercel</div><div class="si">REST APIs</div><div class="si">Web Speech API</div><div class="si">GitHub</div><div class="si">Serverless</div>
-    </div>
-    <div class="sg">
-      <div class="sg-l">Operations</div>
-      <div class="si">Jira / Confluence</div><div class="si">Salesforce</div><div class="si">Intercom</div><div class="si">HubSpot</div><div class="si">Zendesk</div><div class="si">Notion</div><div class="si">Titan CTRM</div>
-    </div>
-  </div>
-</section>
+        <article class="case" role="tabpanel" id="panel-acuity" aria-labelledby="tab-acuity" hidden>
+          <header class="case-head">
+            <h3>Intercom Fin AI, from business case to production</h3>
+            <p>Senior Operations Associate at Acuity Insights, B2B SaaS, 2022 to 2026</p>
+          </header>
+          <div class="case-grid">
+            <div>
+              <h4>The problem</h4>
+              <p>A support team serving enterprise customers was spending its hours on repeat questions that already had known, documented answers.</p>
+            </div>
+            <div>
+              <h4>What I built</h4>
+              <ul>
+                <li>The ROI model and business case that secured executive approval.</li>
+                <li>Requirements, current- and future-state processes, and evaluation criteria, written before the pilot began.</li>
+                <li>A controlled pilot and acceptance testing, then a production rollout with human-in-the-loop controls and escalation paths.</li>
+                <li>Alongside it, redesigned escalation workflows and a contractor forecast that looked 90 days ahead for a 20+ person team.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>The result</h4>
+              <p>67% of interactions resolved autonomously, more than 150 hours of capacity freed every month, about 50% fewer escalations, and 100% SLA adherence. What I learned became the <a href="https://github.com/Moezusb/ai-governance-framework">AI Governance Framework</a>.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="rev">
-    <h2 class="c-head">Let's<br><em>build</em><br>something.</h2>
-    <p class="c-sub">Bilingual EN/FR. Based in Gatineau, QC. Open to remote roles across Canada. Currently targeting operations, AI enablement, and product ops positions.</p>
-    <div class="c-links">
-      <a href="mailto:mohamedmoezus@gmail.com" class="cl"><span class="cl-i">✉</span>mohamedmoezus@gmail.com</a>
-      <a href="https://www.linkedin.com/in/bah-007700/" target="_blank" class="cl"><span class="cl-i">↗</span>linkedin.com/in/bah-007700</a>
-      <a href="https://github.com/Moezusb" target="_blank" class="cl"><span class="cl-i">⌥</span>github.com/Moezusb</a>
-    </div>
-  </div>
-  <div class="c-right rev">
-    <div class="ib"><div class="ib-l">Location</div><div class="ib-v"><strong>Gatineau, QC</strong> — Open to remote across Canada</div></div>
-    <div class="ib"><div class="ib-l">Languages</div><div class="ib-v"><strong>English</strong> · <strong>French</strong> · Fulani/Pular — all fluent</div></div>
-    <div class="ib"><div class="ib-l">Currently</div><div class="ib-v">Senior Operations Associate at <strong>Acuity Insights</strong></div></div>
-    <div class="ib"><div class="ib-l">Education</div><div class="ib-v">BCom Finance · <strong>University of Alberta</strong></div></div>
-  </div>
-</section>
+    <section class="block" id="builds" aria-labelledby="builds-title">
+      <div class="block-head">
+        <h2 id="builds-title">Public builds</h2>
+        <p>Working tools and frameworks you can open, run, and read.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filter builds">
+        <button aria-pressed="true" data-filter="all">All</button>
+        <button aria-pressed="false" data-filter="ai">AI systems</button>
+        <button aria-pressed="false" data-filter="ops">Operations</button>
+        <button aria-pressed="false" data-filter="data">Data and analytics</button>
+      </div>
+      <div class="builds">
+        <article class="build glass build-feature" data-tags="ai ops">
+          <h3>AI Governance Framework</h3>
+          <p>An operator's playbook for deploying AI that answers, decides, and acts: two-axis risk tiers, four safety gates, permissions for AI agents, governance for tools operators build themselves, and seven templates teams can use the same day.</p>
+          <p class="build-meta">Framework, agents, regulated environments</p>
+          <div class="build-links"><a class="btn btn-primary" href="https://moezusb.github.io/ai-governance-framework/">Try the tier classifier</a><a class="btn" href="https://github.com/Moezusb/ai-governance-framework">Read the framework</a></div>
+        </article>
+        <article class="build glass" data-tags="ai">
+          <h3>Deal Desk AI</h3>
+          <p>Paste a sales call transcript and get a deal summary, objections, next steps, risk flags, and a follow-up email. The prompt and model live server-side, so the API key can only do this one job.</p>
+          <p class="build-meta">Claude API, Vercel serverless</p>
+          <div class="build-links"><a class="btn btn-primary" href="https://deal-desk-ai.vercel.app">Open the app</a><a class="btn" href="https://github.com/Moezusb/deal-desk-ai">Code</a></div>
+        </article>
+        <article class="build glass" data-tags="ops ai">
+          <h3>Oracle V2: meeting to Jira</h3>
+          <p>Turns meeting transcripts into validated Jira tickets, and raises priority when an at-risk enterprise account is affected.</p>
+          <p class="build-meta">Python, Pydantic, rule-based extraction</p>
+          <div class="build-links"><a class="btn" href="https://github.com/Moezusb/meeting-to-jira-pipeline">Code</a></div>
+        </article>
+        <article class="build glass" data-tags="ops">
+          <h3>Enterprise Triage Scorer</h3>
+          <p>Scores incoming support tickets on account value, severity, and urgency, then assigns a routing lane, SLA, and owner. Deterministic, so an ops team can audit and tune it.</p>
+          <p class="build-meta">Support operations, interactive</p>
+          <div class="build-links"><a class="btn btn-primary" href="https://moezusb.github.io/enterprise-triage-scorer/">Open the scorer</a><a class="btn" href="https://github.com/Moezusb/enterprise-triage-scorer">Code</a></div>
+        </article>
+        <article class="build glass" data-tags="data">
+          <h3>Revenue Bridge Analytics</h3>
+          <p>Joins CRM, support, and product usage data into an account health score, and ranks the accounts to call first, each with the signal behind the flag.</p>
+          <p class="build-meta">Python, pandas, synthetic data</p>
+          <div class="build-links"><a class="btn" href="https://github.com/Moezusb/revenue-bridge-analytics">Code</a></div>
+        </article>
+        <article class="build glass build-wide" data-tags="ai data">
+          <h3>QuickBooks MCP, read-only</h3>
+          <p>Intuit's MCP server, configured so Claude can answer questions about the books without being able to change them.</p>
+          <p class="build-meta">MCP, Claude Code, configured fork</p>
+          <div class="build-links"><a class="btn" href="https://github.com/Moezusb/quickbooks-online-mcp-server">Setup notes</a></div>
+        </article>
+        <a class="build glass build-github" data-tags="ai ops data" href="https://github.com/Moezusb">
+          <h3>Everything else is on GitHub</h3>
+          <p>Each project has a README covering the problem, how it works, how to run it, and its limits.</p>
+          <span class="build-meta">github.com/Moezusb</span>
+        </a>
+      </div>
 
-<footer>
-  <p>© 2026 Mohamed Bah</p>
-  <p><a href="https://moezusb.github.io">moezusb.github.io</a></p>
-</footer>
+      <div class="lab">
+        <h3>From the lab</h3>
+        <ul>
+          <li><a href="https://moezusb.github.io/yield-curve-monitor"><strong>Yield Curve Monitor</strong><span>Live US, Canada, and Euro Area curves, with spreads over 25 years</span></a></li>
+          <li><a href="https://moezusb.github.io/power-market-monitor"><strong>Power Market Monitor</strong><span>Generation mix, demand, and grid stress across four markets</span></a></li>
+          <li><a href="https://mathvoice-web.vercel.app"><strong>MathVoice</strong><span>A bilingual voice math tutor for Grades 1 to 3</span></a></li>
+          <li><a href="https://moezusb.github.io/energy-advisor-v2/"><strong>Building Energy Advisor</strong><span>Retrofit screening for Canadian buildings</span></a></li>
+        </ul>
+      </div>
+    </section>
 
-<!-- THREE.JS PARTICLE FIELD -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-(function(){
-  const canvas = document.getElementById('canvas-bg');
-  const W = window.innerWidth, H = window.innerHeight;
-  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(W,H);
+    <section class="block" id="experience" aria-labelledby="experience-title">
+      <div class="block-head">
+        <h2 id="experience-title">Experience</h2>
+        <p>Five years across clinical trial software, B2B SaaS, commodities trading, wealth management, and the United Nations.</p>
+      </div>
+      <div class="xp">
+        <ol class="timeline">
+          <li>
+            <time>2026</time>
+            <div><h3>Product Operations Lead, Castor</h3><p class="where">Clinical trial technology, remote</p><p>Release operations, executive scorecards, and voice of customer for the Chief Product Officer. Co-led weekly presentations for the company's AI squad.</p></div>
+          </li>
+          <li>
+            <time>2022 to 2026</time>
+            <div><h3>Senior Operations Associate, Acuity Insights</h3><p class="where">B2B SaaS, remote</p><p>Intercom Fin AI end to end, escalation redesign, contractor forecasting and staffing, and trust and safety casework with Legal.</p></div>
+          </li>
+          <li>
+            <time>2021 to 2022</time>
+            <div><h3>Refined Metals Operator, Trafigura</h3><p class="where">Calgary, AB</p><p>Positions, credit exposure, and P&amp;L across $400M in monthly deal flow. A logistics hub relocation that cut freight costs by 40%.</p></div>
+          </li>
+          <li>
+            <time>2021</time>
+            <div><h3>Wealth Management Associate, Morgan Stanley</h3><p class="where">Calgary, AB</p><p>KYC and AML reviews across North America, EMEA, and APAC.</p></div>
+          </li>
+          <li>
+            <time>2021</time>
+            <div><h3>Research and Communications Intern, UNODC</h3><p class="where">Remote, Dakar and Vienna</p><p>Donor reports and briefs that contributed to $1.4M in secured funding for West Africa initiatives.</p></div>
+          </li>
+        </ol>
+        <aside class="facts glass" aria-label="Education and languages">
+          <h3>Education</h3>
+          <p>Master of Interdisciplinary Artificial Intelligence (MIAI), University of Ottawa. In progress, part-time.</p>
+          <p>Bilingual Bachelor of Commerce in Finance, University of Alberta.</p>
+          <h3>Languages</h3>
+          <p>English, French, and Fulani/Pular, all fluent.</p>
+          <h3>Daily tools</h3>
+          <p>Claude (Projects, API, Claude Code), Intercom Fin AI, MCP, SQL, Python, Google Apps Script, Jira, Confluence, Notion, Zendesk, Salesforce.</p>
+        </aside>
+      </div>
+    </section>
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, W/H, 0.1, 1000);
-  camera.position.z = 28;
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact-card glass">
+        <h2 id="contact-title">Have work that's quietly eating hours?</h2>
+        <a class="contact-email" href="mailto:mohamedmoezus@gmail.com">mohamedmoezus@gmail.com</a>
+        <div class="hero-actions">
+          <a class="btn" href="https://www.linkedin.com/in/bah-007700/">LinkedIn</a>
+          <a class="btn" href="https://github.com/Moezusb">GitHub</a>
+        </div>
+        <p class="contact-note">I reply in English or French.</p>
+      </div>
+    </section>
+  </main>
 
-  const N = 180;
-  const pos = new Float32Array(N*3);
-  const vel = [];
+  <footer class="footer">
+    <p>© <span id="year">2026</span> Mohamed Bah</p>
+  </footer>
 
-  for(let i=0;i<N;i++){
-    pos[i*3]   = (Math.random()-.5)*60;
-    pos[i*3+1] = (Math.random()-.5)*40;
-    pos[i*3+2] = (Math.random()-.5)*28;
-    vel.push({
-      x:(Math.random()-.5)*.013,
-      y:(Math.random()-.5)*.013,
-      z:(Math.random()-.5)*.006
-    });
-  }
-
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
-  const mat = new THREE.PointsMaterial({color:0x00e5cc,size:.16,transparent:true,opacity:.55,sizeAttenuation:true});
-  scene.add(new THREE.Points(geo,mat));
-
-  const lmat = new THREE.LineBasicMaterial({color:0x00e5cc,transparent:true,opacity:.07});
-  let lines = null;
-  const CONN = 11;
-
-  function rebuildLines(){
-    if(lines){scene.remove(lines);lines.geometry.dispose();}
-    const lp=[];
-    for(let i=0;i<N;i++){
-      for(let j=i+1;j<N;j++){
-        const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
-        if(dx*dx+dy*dy+dz*dz < CONN*CONN){
-          lp.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
-        }
-      }
-    }
-    const lg=new THREE.BufferGeometry();
-    lg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(lp),3));
-    lines=new THREE.LineSegments(lg,lmat);
-    scene.add(lines);
-  }
-
-  let mx=0,my=0;
-  document.addEventListener('mousemove',e=>{mx=(e.clientX/window.innerWidth-.5)*.28;my=(e.clientY/window.innerHeight-.5)*.18;});
-
-  let frame=0;
-  (function tick(){
-    requestAnimationFrame(tick);
-    for(let i=0;i<N;i++){
-      pos[i*3]   +=vel[i].x;
-      pos[i*3+1] +=vel[i].y;
-      pos[i*3+2] +=vel[i].z;
-      if(Math.abs(pos[i*3])>32)   vel[i].x*=-1;
-      if(Math.abs(pos[i*3+1])>22) vel[i].y*=-1;
-      if(Math.abs(pos[i*3+2])>15) vel[i].z*=-1;
-    }
-    geo.attributes.position.needsUpdate=true;
-    if(++frame%3===0) rebuildLines();
-    camera.position.x+=(mx-camera.position.x)*.03;
-    camera.position.y+=(-my-camera.position.y)*.03;
-    camera.lookAt(scene.position);
-    renderer.render(scene,camera);
-  })();
-
-  window.addEventListener('resize',()=>{
-    camera.aspect=window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth,window.innerHeight);
-  });
-})();
-</script>
-
-<!-- CURSOR -->
-<script>
-const cur=document.getElementById('cur'),ring=document.getElementById('ring');
-let cx=0,cy=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{cx=e.clientX;cy=e.clientY;});
-(function loop(){
-  cur.style.left=cx+'px'; cur.style.top=cy+'px';
-  rx+=(cx-rx)*.12; ry+=(cy-ry)*.12;
-  ring.style.left=rx+'px'; ring.style.top=ry+'px';
-  requestAnimationFrame(loop);
-})();
-</script>
-
-<!-- STAT COUNTERS -->
-<script>
-(function(){
-  function counter(el,target,suffix){
-    const d=1800,s=performance.now();
-    (function step(now){
-      const p=Math.min((now-s)/d,1);
-      const e=1-Math.pow(1-p,3);
-      el.textContent=Math.round(e*target)+(suffix||'');
-      if(p<1) requestAnimationFrame(step);
-    })(performance.now());
-  }
-  const els=document.querySelectorAll('.stat-n[data-target]');
-  let done=false;
-  new IntersectionObserver(entries=>{
-    if(entries[0].isIntersecting&&!done){
-      done=true;
-      setTimeout(()=>els.forEach(el=>counter(el,+el.dataset.target,el.dataset.suffix||'')),900);
-    }
-  },{threshold:.3}).observe(document.querySelector('.hero-stats'));
-})();
-</script>
-
-<!-- SCROLL REVEAL -->
-<script>
-const revObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');revObs.unobserve(e.target);}});
-},{threshold:.08,rootMargin:'0px 0px -32px 0px'});
-document.querySelectorAll('.rev').forEach(r=>revObs.observe(r));
-</script>
-
+  <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
